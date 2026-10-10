@@ -40,7 +40,9 @@ En Vercel: **Add New → Project → Import** el repo, y en **Environment Variab
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key |
 | `NEXT_PUBLIC_WHATSAPP` | WhatsApp de la posada. Si no se carga, usa el del cartel: `5491168225708` (011 6822-5708) |
 
-**Deploy.** Si cambiás una variable después, hay que hacer **Redeploy** (las `NEXT_PUBLIC_` se graban al compilar).
+**Deploy.** El archivo `vercel.json` programa una llamada diaria a `/api/mantener-activa` para que Supabase (plan gratuito) no pause la base por inactividad. Opcional: cargar `CRON_SECRET` con cualquier texto largo.
+
+Si cambiás una variable después, hay que hacer **Redeploy** (las `NEXT_PUBLIC_` se graban al compilar).
 
 ### 4. Dominio
 Vercel → proyecto → **Settings → Domains** → agregar `posadaabuelaemilia.com.ar` y `www.posadaabuelaemilia.com.ar`, y seguir las instrucciones de DNS.
