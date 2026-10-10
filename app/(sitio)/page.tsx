@@ -12,15 +12,6 @@ export const revalidate = 3600;
 
 const aVisor = (fotos: Foto[]): FotoVisor[] => fotos.map((f) => ({ src: urlImagen(f.path), alt: f.alt }));
 
-const MOTIVOS = [
-  { titulo: "Termas de San José", foto: "/img/termas-san-jose.webp", alt: "Ingreso a las Termas de San José",
-    texto: "Piletas termales para relajarse todo el año, a pocos minutos de la posada." },
-  { titulo: "Molino Forclaz", foto: "/img/molino-forclaz.webp", alt: "Museo Molino Forclaz",
-    texto: "El histórico molino de viento de los colonos, hoy museo, símbolo de la colonia fundada por inmigrantes europeos." },
-  { titulo: "Paseo del Mate", foto: "/img/paseo-del-mate.webp", alt: "Cartel del Paseo del Mate",
-    texto: "Un recorrido dedicado a la tradición del mate, para conocer la cultura de la región." },
-];
-
 const SERVICIOS: [string, React.ReactNode][] = [
   ["WiFi", <path key="w" d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.5h.01" />],
   ["Cochera privada", <path key="c" d="M3 11l9-7 9 7v9H3zM7 20v-6h10v6M7 17h10" />],
@@ -31,7 +22,7 @@ const SERVICIOS: [string, React.ReactNode][] = [
 ];
 
 export default async function Inicio() {
-  const { departamentos, portada, espacios, nosotros } = await getDatosSitio();
+  const { departamentos, portada, espacios, nosotros, atractivos, textos } = await getDatosSitio();
   const hero = portada[0];
   const fotoNos = nosotros[0];
 
@@ -156,23 +147,30 @@ export default async function Inicio() {
           </div>
         </section>
 
-        <section className="seccion seccion--oscura" aria-labelledby="t-por">
-          <div className="contenedor">
-            <p className="eyebrow">¿Por qué San José?</p>
-            <h2 id="t-por" className="titulo">Termas, historia y tradición</h2>
-            <div className="motivos">
-              {MOTIVOS.map((m) => (
-                <article className="motivo" key={m.titulo}>
-                  <div className="motivo__foto"><Image src={m.foto} alt={m.alt} fill sizes="(max-width: 860px) 100vw, 360px" /></div>
-                  <div className="motivo__cuerpo">
-                    <h3>{m.titulo}</h3>
-                    <p>{m.texto}</p>
-                  </div>
-                </article>
-              ))}
+        {atractivos.length > 0 && (
+          <section className="seccion seccion--oscura" id="san-jose" aria-labelledby="t-por">
+            <div className="contenedor">
+              {textos.sanjose_eyebrow && <p className="eyebrow">{textos.sanjose_eyebrow}</p>}
+              <h2 id="t-por" className="titulo">{textos.sanjose_titulo}</h2>
+              <div className="motivos">
+                {atractivos.map((m) => (
+                  <article className="motivo" key={m.id}>
+                    {m.foto && <div className="motivo__foto"><Image src={urlImagen(m.foto)} alt={m.titulo} fill sizes="(max-width: 860px) 100vw, 360px" /></div>}
+                    <div className="motivo__cuerpo">
+                      <h3>{m.titulo}</h3>
+                      {m.texto && <p>{m.texto}</p>}
+                      {m.link_url && (
+                        <a className="motivo__link" href={m.link_url} target="_blank" rel="noopener noreferrer">
+                          {m.link_texto || "Más información"} <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="seccion contenedor ubicacion" id="ubicacion" aria-labelledby="t-ubi">
           <div>

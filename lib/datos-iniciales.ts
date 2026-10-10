@@ -1,4 +1,6 @@
-import type { DatosSitio, Foto } from "./types";
+import type { Atractivo, DatosSitio, Foto, TextosSitio } from "./types";
+
+export const TEXTOS_POR_DEFECTO: TextosSitio = { sanjose_eyebrow: "¿Por qué San José?", sanjose_titulo: "Termas, historia y tradición" };
 
 /**
  * Contenido inicial (fotos del sitio anterior, optimizadas en /public/img). Se usa:
@@ -12,7 +14,16 @@ const BASE = ["Cocina equipada", "WiFi y Smart TV", "Cochera privada"];
 const depto = (id: number, letra: string, capacidad: number, fotos: Foto[]) =>
   ({ id, nombre: `Departamento ${letra}`, capacidad, descripcion: "", caracteristicas: BASE, activo: true, orden: id, fotos });
 
+const atr = (id: number, titulo: string, texto: string, foto: string): Atractivo =>
+  ({ id, titulo, texto, foto: `/img/${foto}.webp`, link_url: null, link_texto: "", activo: true, orden: id });
+
 export const DATOS_INICIALES: DatosSitio = {
+  textos: TEXTOS_POR_DEFECTO,
+  atractivos: [
+    atr(1, "Termas de San José", "Piletas termales para relajarse todo el año, a pocos minutos de la posada.", "termas-san-jose"),
+    atr(2, "Molino Forclaz", "El histórico molino de viento de los colonos, hoy museo, símbolo de la colonia fundada por inmigrantes europeos.", "molino-forclaz"),
+    atr(3, "Paseo del Mate", "Un recorrido dedicado a la tradición del mate, para conocer la cultura de la región.", "paseo-del-mate"),
+  ],
   portada: [f("portada-frente", "Frente de la Posada Abuela Emilia")],
   nosotros: [f("susana-y-daniel", "Susana y Daniel, dueños de la posada"), f("susana-y-daniel-homologado", "Susana y Daniel con el certificado de alojamiento homologado")],
   espacios: [

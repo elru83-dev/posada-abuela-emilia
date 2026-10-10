@@ -49,3 +49,17 @@ begin
     ('nosotros', '/img/susana-y-daniel.webp', 'Susana y Daniel, dueños de la posada', 0),
     ('nosotros', '/img/susana-y-daniel-homologado.webp', 'Susana y Daniel con el certificado de alojamiento homologado', 1);
 end $$;
+
+-- Sección "¿Por qué San José?"
+insert into public.textos_sitio (clave, valor) values
+  ('sanjose_eyebrow', '¿Por qué San José?'),
+  ('sanjose_titulo', 'Termas, historia y tradición')
+on conflict (clave) do nothing;
+
+insert into public.atractivos (titulo, texto, foto, link_url, link_texto, orden)
+select * from (values
+  ('Termas de San José', 'Piletas termales para relajarse todo el año, a pocos minutos de la posada.', '/img/termas-san-jose.webp', null::text, '', 0),
+  ('Molino Forclaz', 'El histórico molino de viento de los colonos, hoy museo, símbolo de la colonia fundada por inmigrantes europeos.', '/img/molino-forclaz.webp', null::text, '', 1),
+  ('Paseo del Mate', 'Un recorrido dedicado a la tradición del mate, para conocer la cultura de la región.', '/img/paseo-del-mate.webp', null::text, '', 2)
+) as v(titulo, texto, foto, link_url, link_texto, orden)
+where not exists (select 1 from public.atractivos);

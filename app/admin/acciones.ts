@@ -146,3 +146,83 @@ export async function salir() {
   await sb.auth.signOut();
   redirect("/admin/login");
 }
+
+// ============================== San José ==============================
+
+/** Acepta "www.algo.com" o "algo.com/x" y lo completa con https://. Vacío = sin link. */
+function normalizarLink(v: string): string | null | false {
+  const t = v.trim();
+  if (!t) return null;
+  const url = /^https?:\/\//i.test(t) ? t : `https://${t}`;
+  try {
+    const u = new URL(url);
+    return (u.protocol === "https:" || u.protocol === "http:") && u.hostname.includes(".") && !/\s/.test(url) ? u.href.slice(0, 500) : false;
+  } catch { return false; }
+}
+
+export async function guardarTextosSanJose(_prev: EstadoForm | null, f: FormData): Promise<EstadoForm> {
+  const { sb } = await requerirAdmin();
+  const titulo = txt(f, "sanjose_titulo", 120);
+  if (titulo.length < 2) return { ok: false, mensaje: "El título es obligatorio." };
+  const { error } = await sb.from("textos_sitio").upsert([
+    { clave: "sanjose_eyebrow", valor: txt(f, "sanjose_eyebrow", 60) },
+    { clave: "sanjose_titulo", valor: titulo },
+  ]);
+  if (error) return { ok: false, mensaje: `No se pudo guardar: ${error.message}` };
+  publicar();
+  return { ok: true, mensaje: "Encabezado guardado y publicado." };
+}
+
+export async function guardarAtractivo(_prev: EstadoForm | null, f: FormData): Promise<EstadoForm> {
+  const { sb } = await requerirAdmin();
+  const id = Number(f.get("id")) || null;
+  const titulo = txt(f, "titulo", 80);
+  const link = normalizarLink(txt(f, "link_url", 500));
+  if (titulo.length < 2) return { ok: false, mensaje: "El título es obligatorio." };
+  if (link === false) return { ok: false, mensaje: "El link no es una dirección web válida (ej.: https://www.termas.com.ar)." };
+
+  const foto = txt(f, "foto", 400) || null;
+  const fila = {
+    titulo, foto, link_url: link,
+    texto: txt(f, "texto", 600),
+    link_texto: txt(f, "link_texto", 40),
+    activo: f.get("activo") === "on",
+  };
+
+  if (id) {
+    const { data: anterior } = await sb.from("atractivos").select("foto").eq("id", id).maybeSingle();
+    const { error } = await sb.from("atractivos").update(fila).eq("id", id);
+    if (error) return { ok: false, mensaje: `No se pudo guardar: ${error.message}` };
+    if (anterior?.foto && anterior.foto !== foto) await borrarArchivos(sb, [anterior.foto]); // foto reemplazada o quitada
+    publicar();
+    return { ok: true, mensaje: "Cambios guardados y publicados." };
+  }
+  const { data: ultimo } = await sb.from("atractivos").select("orden").order("orden", { ascending: false }).limit(1).maybeSingle();
+  const { error } = await sb.from("atractivos").insert({ ...fila, orden: (ultimo?.orden ?? -1) + 1 });
+  if (error) return { ok: false, mensaje: `No se pudo crear: ${error.message}` };
+  publicar();
+  redirect("/admin/san-jose?aviso=creado");
+}
+
+export async function alternarAtractivo(id: number, activo: boolean) {
+  const { sb } = await requerirAdmin();
+  const { error } = await sb.from("atractivos").update({ activo }).eq("id", id);
+  if (error) throw new Error(error.message);
+  publicar();
+}
+
+export async function ordenarAtractivos(ids: number[]) {
+  const { sb } = await requerirAdmin();
+  const { error } = await sb.rpc("ordenar_atractivos", { p_ids: ids.map(Number).filter(Boolean).slice(0, 100) });
+  if (error) throw new Error(error.message);
+  publicar();
+}
+
+export async function eliminarAtractivo(f: FormData) {
+  const { sb } = await requerirAdmin();
+  const { data, error } = await sb.from("atractivos").delete().eq("id", Number(f.get("id"))).select("foto").maybeSingle();
+  if (error) throw new Error(error.message);
+  if (data?.foto) await borrarArchivos(sb, [data.foto]);
+  publicar();
+  redirect("/admin/san-jose?aviso=eliminado");
+}

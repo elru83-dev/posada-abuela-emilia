@@ -22,6 +22,7 @@ export default async function PanelInicio() {
         <div className="adm-acciones">
           <Link className="btn" href="/admin/departamentos">Fotos y datos de los departamentos</Link>
           <Link className="btn btn--borde" href="/admin/fotos">Portada, espacios y Nosotros</Link>
+          <Link className="btn btn--borde" href="/admin/san-jose">Sección San José</Link>
           <Link className="btn btn--borde" href="/admin/consultas">Ver consultas</Link>
         </div>
       </div>

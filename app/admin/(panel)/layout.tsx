@@ -15,6 +15,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <nav className="adm__nav" aria-label="Panel">
           <Link href="/admin/departamentos">Departamentos</Link>
           <Link href="/admin/fotos">Fotos del sitio</Link>
+          <Link href="/admin/san-jose">San José</Link>
           <Link href="/admin/consultas">Consultas</Link>
           <a href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
         </nav>

@@ -118,3 +118,24 @@
 .adm-login__marca { display: flex; align-items: center; gap: 14px; font: 400 1.1rem/1.15 var(--f-titulo); color: var(--texto-2); }
 .adm-login__marca b { font-weight: 400; font-size: 1.45rem; color: var(--primario-osc); }
 .adm-login__marca img { border-radius: 50%; object-fit: cover; }
+
+/* Foto única (tarjetas de San José) */
+.fu { display: grid; gap: 10px; }
+.fu__vista { aspect-ratio: 4 / 3; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--fondo-2); display: grid; place-items: center; color: var(--texto-2); font-size: .9rem; }
+.fu__vista img { width: 100%; height: 100%; object-fit: cover; }
+.fu__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.fu__acciones label { cursor: pointer; }
+.fu__ocupado { cursor: progress; opacity: .7; }
+.adm-grid--foto { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); align-items: start; }
+.adm-grid--foto > .campo:nth-child(n+3) { grid-column: auto; }
+@media (max-width: 700px) { .adm-grid--foto { grid-template-columns: 1fr; } }
+
+/* Lista de tarjetas de San José */
+.adm-atr { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.adm-atr__item { display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 10px; border-radius: 12px; background: var(--fondo); border: 1px solid #E7DFD0; }
+.adm-atr__item--oculto .adm-depto__link { opacity: .5; }
+.adm-atr__orden { display: grid; gap: 4px; }
+.adm-atr__orden button { width: 36px; height: 30px; border-radius: 8px; border: 1.5px solid #D9D0C0; background: var(--blanco); cursor: pointer; font-weight: 700; color: var(--tinta); }
+.adm-atr__orden button:hover:not(:disabled) { border-color: var(--primario); color: var(--primario); }
+.adm-atr__orden button:disabled { opacity: .3; cursor: default; }
+@media (max-width: 480px) { .adm-atr__item .adm-depto__img { width: 64px; height: 48px; } }

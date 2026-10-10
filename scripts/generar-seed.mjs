@@ -26,6 +26,18 @@ ${D.departamentos.flatMap((d) => d.fotos.map((f, i) => `    (${q(d.nombre)}, ${q
 ${["portada", "espacios", "nosotros"].flatMap((s) => D[s].map((f, i) => `    (${q(s)}, ${q(f.path)}, ${q(f.alt)}, ${i})`)).join(",\n")};
 end $$;
 `;
+sql += `
+-- Sección "¿Por qué San José?"
+insert into public.textos_sitio (clave, valor) values
+${Object.entries(D.textos).map(([k, v]) => `  (${q(k)}, ${q(v)})`).join(",\n")}
+on conflict (clave) do nothing;
+
+insert into public.atractivos (titulo, texto, foto, link_url, link_texto, orden)
+select * from (values
+${D.atractivos.map((a, i) => `  (${q(a.titulo)}, ${q(a.texto)}, ${a.foto ? q(a.foto) : "null"}, ${a.link_url ? q(a.link_url) : "null::text"}, ${q(a.link_texto)}, ${i})`).join(",\n")}
+) as v(titulo, texto, foto, link_url, link_texto, orden)
+where not exists (select 1 from public.atractivos);
+`;
 writeFileSync(new URL("../supabase/seed.sql", import.meta.url), sql);
 
 // Fotos 2026 de A y B (opcional: requiere haber corrido descargar-imagenes.ps1 y subido public/img).

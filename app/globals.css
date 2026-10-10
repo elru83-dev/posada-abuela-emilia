@@ -154,12 +154,11 @@ p { margin: 0; }
 @media (max-width: 860px) { .nosotros { grid-template-columns: 1fr; gap: 40px; } .nosotros__foto::after { inset: 12px -10px -12px 10px; } }
 
 /* Por qué San José */
-.motivos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+.motivos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px; margin-top: 48px; }
 .motivo { padding: 28px; border-radius: var(--radio); border: 1px solid rgb(255 255 255 / .16); }
 .motivo svg { width: 52px; height: 52px; fill: none; stroke: var(--acento); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .motivo h3 { font-size: 1.45rem; margin-top: 18px; }
 .motivo p { margin-top: 10px; color: rgb(255 255 255 / .82); }
-@media (max-width: 860px) { .motivos { grid-template-columns: 1fr; gap: 16px; } }
 
 /* Ubicación */
 .ubicacion { display: grid; grid-template-columns: 1fr 1.6fr; gap: 48px; align-items: center; }
@@ -253,10 +252,13 @@ p { margin: 0; }
 .seccion--oscura .eyebrow { color: #F0A35E; }
 
 /* Por qué San José: tarjetas con foto */
-.motivo { padding: 0; overflow: hidden; background: rgb(255 255 255 / .05); }
+.motivo { padding: 0; overflow: hidden; background: rgb(255 255 255 / .05); display: flex; flex-direction: column; }
 .motivo__foto { position: relative; aspect-ratio: 4 / 3; max-width: 100%; }
 .motivo__foto img { object-fit: cover; }
-.motivo__cuerpo { padding: 22px 24px 26px; }
+.motivo__cuerpo { padding: 22px 24px 26px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.motivo__cuerpo p { margin-top: 0; }
+.motivo__link { margin-top: auto; align-self: flex-start; display: inline-flex; gap: 6px; padding-top: 6px; color: #F0A35E; font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; }
+.motivo__link:hover { border-color: currentColor; }
 .motivo h3 { margin-top: 0; }
 
 /* Reservar: foto del mate */

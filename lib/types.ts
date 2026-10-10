@@ -13,11 +13,27 @@ export interface Departamento {
   fotos: Foto[];
 }
 
+export interface Atractivo {
+  id: number;
+  titulo: string;
+  texto: string;
+  foto: string | null;
+  link_url: string | null;
+  link_texto: string;
+  activo: boolean;
+  orden: number;
+}
+
+/** Textos editables del sitio (tabla textos_sitio). */
+export interface TextosSitio { sanjose_eyebrow: string; sanjose_titulo: string }
+
 export interface DatosSitio {
   departamentos: Departamento[];
   portada: Foto[];
   espacios: Foto[];
   nosotros: Foto[];
+  atractivos: Atractivo[];
+  textos: TextosSitio;
 }
 
 export const SECCIONES_SITIO: { clave: Exclude<Seccion, "departamento">; titulo: string; ayuda: string }[] = [

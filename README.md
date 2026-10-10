@@ -16,7 +16,8 @@ Las fotos del sitio anterior ya vienen incluidas y optimizadas en `public/img/` 
 ### 2. Supabase
 1. Crear un proyecto en https://supabase.com (región São Paulo).
 2. **SQL Editor → New query**: pegar y correr `supabase/schema.sql`.
-3. Otra query: correr `supabase/seed.sql` (carga los 6 departamentos con sus fotos).
+3. Otra query: correr `supabase/seed.sql` (carga los 6 departamentos con sus fotos y las tarjetas de San José).
+   - **Si ya tenías la base creada antes de la sección San José editable**: correr solo `supabase/migracion-san-jose.sql`.
 4. **Authentication → Users → Add user**: email + contraseña de los dueños (marcar *Auto Confirm User*).
 5. Correr `supabase/admin.sql` cambiando el email por el del paso anterior.
 6. **Project Settings → API**: copiar *Project URL* y *anon public key*.
@@ -48,6 +49,7 @@ Vercel → proyecto → **Settings → Domains** → agregar `posadaabuelaemilia
 Entrar a `/admin` con el usuario creado.
 - **Departamentos**: tocar uno → subir fotos (se pueden elegir varias juntas, se achican solas a WebP), ordenarlas con ← →, ★ para elegir la portada, ✕ para borrar. Debajo: nombre, capacidad, descripción, características y si está visible.
 - **Fotos del sitio**: foto de portada, espacios compartidos (la descripción de cada foto se muestra como título) y la foto de Nosotros.
+- **San José**: título de la sección y sus tarjetas (foto, texto y link opcional). Se agregan, ordenan con ↑ ↓, ocultan o eliminan.
 - **Consultas**: las reservas que llegan por el formulario, con botón para responder por WhatsApp y marcar como atendida.
 
 Todo cambio se publica en el sitio al instante.
@@ -55,7 +57,7 @@ Todo cambio se publica en el sitio al instante.
 ## Personalizar
 - **Colores**: tomados del logo (verde `#00443A` y naranja `#BC580C`), en las variables al principio de `app/globals.css`.
 - **Logos**: `public/img/logo-horizontal.webp` (fondos claros), `logo-blanco.webp` (fondos oscuros) e `isotipo.webp`; el favicon es `app/icon.png`.
-- **Textos fijos** (bienvenida, “¿Por qué San José?”): `app/(sitio)/page.tsx`.
+- **Textos fijos** (bienvenida): `app/(sitio)/page.tsx`. La sección San José se edita desde el panel.
 - **Dirección, horarios, estadía mínima, Facebook**: `lib/site.ts`.
 
 ## Desarrollo
